@@ -1,7 +1,9 @@
+use egui::ScrollArea;
+
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
-pub struct OffToolbox {
+pub struct OffToolboxApp {
     // Example stuff:
     label: String,
 
@@ -9,17 +11,17 @@ pub struct OffToolbox {
     version: f32,
 }
 
-impl Default for OffToolbox {
+impl Default for OffToolboxApp {
     fn default() -> Self {
         Self {
             // Example stuff:
             label: String::from("Hello World!"),
-            version: 2.7,
+            version: 0.1,
         }
     }
 }
 
-impl OffToolbox {
+impl OffToolboxApp {
     /// Called once before the first frame.
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         // This is also where you can customize the look and feel of egui using
@@ -35,7 +37,7 @@ impl OffToolbox {
     }
 }
 
-impl eframe::App for OffToolbox {
+impl eframe::App for OffToolboxApp {
     /// Called by the frame work to save state before shutdown.
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
         eframe::set_value(storage, eframe::APP_KEY, self);
@@ -46,8 +48,14 @@ impl eframe::App for OffToolbox {
         // Put your widgets into a `SidePanel`, `TopBottomPanel`, `CentralPanel`, `Window` or `Area`.
         // For inspiration and more examples, go to https://emilk.github.io/egui
         egui::SidePanel::left("side_panel").show(ctx, |ui| {
-            ui.heading("Side Panel");
-            ui.label("You can put any widgets here.");
+            ui.heading("OffToolbox");
+            ui.label("The offensive toolbox.");
+            ui.label(format!("v{}", self.version));
+            ui.separator();
+            dabuttons(ui);
+
+            ui.separator();
+
         });
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             // The top panel is often a good place for a menu bar:
@@ -111,4 +119,16 @@ fn powered_by_egui_and_eframe(ui: &mut egui::Ui) {
     });
 }
 
-
+fn dabuttons(ui: &mut egui::Ui) {
+        ui.vertical_centered_justified(|ui| {
+            ui.heading("Hover to switch cursor icon:");
+            ScrollArea::vertical().show(ui, |ui| {
+                for &cursor_icon in &egui::CursorIcon::ALL {
+                    let _ = ui
+                        .button(format!("{cursor_icon:?}"))
+                        .on_hover_cursor(cursor_icon);
+                }
+            });
+            //ui.add(crate::egui_github_link_file!());
+        });
+    }
