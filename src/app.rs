@@ -1,5 +1,6 @@
 use egui::ScrollArea;
-
+use std::thread;
+use std::time::Duration;
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
@@ -14,7 +15,6 @@ pub struct OffToolboxApp {
 impl Default for OffToolboxApp {
     fn default() -> Self {
         Self {
-            // Example stuff:
             label: String::from("Hello World!"),
             version: 0.1,
         }
@@ -47,12 +47,18 @@ impl eframe::App for OffToolboxApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         // Put your widgets into a `SidePanel`, `TopBottomPanel`, `CentralPanel`, `Window` or `Area`.
         // For inspiration and more examples, go to https://emilk.github.io/egui
+        //
+        let mut open = false;
+        egui::Window::new("OffToolbox").open(&mut open).show(ctx, |ui| {
+            ui.heading("OffToolbox test");
+        });
+        
         egui::SidePanel::left("side_panel").show(ctx, |ui| {
             ui.heading("OffToolbox");
             ui.label("The offensive toolbox.");
             ui.label(format!("v{}", self.version));
             ui.separator();
-            dabuttons(ui);
+            sidemenu(ui);
 
             ui.separator();
 
@@ -78,24 +84,11 @@ impl eframe::App for OffToolboxApp {
 
         egui::CentralPanel::default().show(ctx, |ui| {
             // The central panel the region left after adding TopPanel's and SidePanel's
-            ui.heading("eframe template");
 
-            ui.horizontal(|ui| {
-                ui.label("Write something: ");
-                ui.text_edit_singleline(&mut self.label);
-            });
 
-            ui.add(egui::Slider::new(&mut self.version, 0.0..=10.0).text("value"));
-            if ui.button("Increment").clicked() {
-                self.version += 1.0;
-            }
 
             ui.separator();
 
-            ui.add(egui::github_link_file!(
-                "https://github.com/emilk/eframe_template/blob/master/",
-                "Source code."
-            ));
 
             ui.with_layout(egui::Layout::bottom_up(egui::Align::LEFT), |ui| {
                 powered_by_egui_and_eframe(ui);
@@ -119,15 +112,17 @@ fn powered_by_egui_and_eframe(ui: &mut egui::Ui) {
     });
 }
 
-fn dabuttons(ui: &mut egui::Ui) {
+fn sidemenu(ui: &mut egui::Ui) {
         ui.vertical_centered_justified(|ui| {
-            ui.heading("Hover to switch cursor icon:");
             ScrollArea::vertical().show(ui, |ui| {
-                for &cursor_icon in &egui::CursorIcon::ALL {
-                    let _ = ui
-                        .button(format!("{cursor_icon:?}"))
-                        .on_hover_cursor(cursor_icon);
-                }
+
+                ui.button("App")
+                    .on_hover_ui(|ui| {
+                        ui.horizontal_wrapped(|ui| {
+                            ui.label("This is a tooltip");
+                        });
+                    });
+                ui.button("Settings");
             });
             //ui.add(crate::egui_github_link_file!());
         });
