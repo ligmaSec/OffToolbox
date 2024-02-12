@@ -16,7 +16,7 @@ impl Default for OffToolboxApp {
     fn default() -> Self {
         Self {
             label: String::from("Hello World!"),
-            version: 0.1,
+            version: 0.001,
         }
     }
 }
@@ -53,7 +53,7 @@ impl eframe::App for OffToolboxApp {
             ui.heading("OffToolbox test");
         });
         
-        egui::SidePanel::left("side_panel").show(ctx, |ui| {
+        egui::SidePanel::left("side_panel").resizable(false).show(ctx, |ui| {
             ui.heading("OffToolbox");
             ui.label("The offensive toolbox.");
             ui.label(format!("v{}", self.version));
@@ -64,7 +64,6 @@ impl eframe::App for OffToolboxApp {
 
         });
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
-            // The top panel is often a good place for a menu bar:
 
             egui::menu::bar(ui, |ui| {
                 // NOTE: no File->Quit on web pages!
