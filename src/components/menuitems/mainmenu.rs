@@ -1,5 +1,7 @@
+use egui::Ui;
 
 
-pub fn test(){
-    println!("mainmenu.rs");
+
+pub fn default(ui: &mut Ui){
+    Ui::label(ui, "Welcome to the main menu!");
 }

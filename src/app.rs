@@ -6,15 +6,15 @@ use crate::components;
 pub struct OffToolboxApp {
     // Example stuff:
     #[serde(skip)] // opted out of serialization
-    version: f32,
-    //#[serde(skip)] // opted out of serialization
+    version: &'static str,
+
     state: OffToolboxState,
 }
 
 impl Default for OffToolboxApp {
     fn default() -> Self {
         Self {
-            version: 0.001,
+            version: "0.0.1",
             state: OffToolboxState::Main,
         }
     }
@@ -25,8 +25,7 @@ pub enum OffToolboxState {
     Main,
     Settings,
     About,
-    Help,
-    None,
+    Quit,
 }
 impl OffToolboxApp {
     /// Called once before the first frame.
@@ -92,12 +91,20 @@ impl eframe::App for OffToolboxApp {
             match self.state {
                 OffToolboxState::Main => {
                     println!("in Main");
-                    //components::menuitems::mainmenu::test();
+                    components::menuitems::mainmenu::default(ui);
                     powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Settings => {
                     println!("in Settings");
-                    egui::widgets::global_dark_light_mode_buttons(ui);
+                    components::menuitems::settingsmenu::default(ui);
+                }
+                OffToolboxState::About => {
+                    println!("in About");
+                    components::menuitems::aboutmenu::default(ui);
+                }
+                OffToolboxState::Quit => {
+                    println!("Quitting");
+                    components::menuitems::quitmenu::default(ui);
                 }
                 _ => {}
             }
@@ -142,8 +149,17 @@ fn sidemenu(ui: &mut egui::Ui, state: &mut OffToolboxState) {
 
 
                 if ui.button("Settings").clicked() {
-                    //return the setting state
                     *state = OffToolboxState::Settings;
+                }
+
+
+                if ui.button("About").clicked() {
+                    *state = OffToolboxState::About;
+                }
+
+
+                if ui.button("Quit").clicked() {
+                    *state = OffToolboxState::Quit;
                 }
             });
             //ui.add(crate::egui_github_link_file!());
