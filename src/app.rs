@@ -1,32 +1,36 @@
-use egui::ScrollArea;
-use std::thread;
-use std::time::Duration;
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct OffToolboxApp {
     // Example stuff:
-    label: String,
-
-    #[serde(skip)] // This how you opt-out of serialization of a field
+    #[serde(skip)] // opted out of serialization
     version: f32,
+    #[serde(skip)] // opted out of serialization
+    state: OffToolboxState,
 }
 
 impl Default for OffToolboxApp {
     fn default() -> Self {
         Self {
-            label: String::from("Hello World!"),
             version: 0.001,
+            state: OffToolboxState::Main,
         }
     }
 }
 
+pub enum OffToolboxState {
+    Main,
+    Settings,
+    About,
+    Help,
+    None,
+}
 impl OffToolboxApp {
     /// Called once before the first frame.
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         // This is also where you can customize the look and feel of egui using
         // `cc.egui_ctx.set_visuals` and `cc.egui_ctx.set_fonts`.
-
+        
         // Load previous app state (if any).
         // Note that you must enable the `persistence` feature for this to work.
         if let Some(storage) = cc.storage {
@@ -36,7 +40,6 @@ impl OffToolboxApp {
         Default::default()
     }
 }
-
 impl eframe::App for OffToolboxApp {
     /// Called by the frame work to save state before shutdown.
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
@@ -58,7 +61,7 @@ impl eframe::App for OffToolboxApp {
             ui.label("The offensive toolbox.");
             ui.label(format!("v{}", self.version));
             ui.separator();
-            sidemenu(ui);
+            sidemenu(ui, &mut self.state);
 
             ui.separator();
 
@@ -80,11 +83,19 @@ impl eframe::App for OffToolboxApp {
                 egui::widgets::global_dark_light_mode_buttons(ui);
             });
         });
-
+        
         egui::CentralPanel::default().show(ctx, |ui| {
             // The central panel the region left after adding TopPanel's and SidePanel's
 
-
+            match self.state {
+                OffToolboxState::Main => {
+                    println!("in Main");
+                }
+                OffToolboxState::Settings => {
+                    println!("in Settings");
+                }
+                _ => {}
+            }
 
             ui.separator();
 
@@ -111,17 +122,24 @@ fn powered_by_egui_and_eframe(ui: &mut egui::Ui) {
     });
 }
 
-fn sidemenu(ui: &mut egui::Ui) {
+fn sidemenu(ui: &mut egui::Ui, state: &mut OffToolboxState) {
         ui.vertical_centered_justified(|ui| {
-            ScrollArea::vertical().show(ui, |ui| {
+            egui::ScrollArea::vertical().show(ui, |ui| {
 
-                ui.button("App")
+                if ui.button("App")
                     .on_hover_ui(|ui| {
                         ui.horizontal_wrapped(|ui| {
                             ui.label("This is a tooltip");
                         });
-                    });
-                ui.button("Settings");
+                    }).clicked() {
+                        *state = OffToolboxState::Main;
+                    }
+
+
+                if ui.button("Settings").clicked() {
+                    //return the setting state
+                    *state = OffToolboxState::Settings;
+                }
             });
             //ui.add(crate::egui_github_link_file!());
         });
