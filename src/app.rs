@@ -7,7 +7,7 @@ pub struct OffToolboxApp {
     // Example stuff:
     #[serde(skip)] // opted out of serialization
     version: f32,
-    #[serde(skip)] // opted out of serialization
+    //#[serde(skip)] // opted out of serialization
     state: OffToolboxState,
 }
 
@@ -20,6 +20,7 @@ impl Default for OffToolboxApp {
     }
 }
 
+#[derive(serde::Deserialize, serde::Serialize)]
 pub enum OffToolboxState {
     Main,
     Settings,
@@ -91,7 +92,7 @@ impl eframe::App for OffToolboxApp {
             match self.state {
                 OffToolboxState::Main => {
                     println!("in Main");
-                    components::menuitems::mainmenu::test();
+                    //components::menuitems::mainmenu::test();
                     powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Settings => {
