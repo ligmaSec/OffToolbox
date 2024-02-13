@@ -1,3 +1,5 @@
+use crate::components;
+
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
@@ -80,7 +82,6 @@ impl eframe::App for OffToolboxApp {
                     ui.add_space(16.0);
                 }
 
-                egui::widgets::global_dark_light_mode_buttons(ui);
             });
         });
         
@@ -90,11 +91,12 @@ impl eframe::App for OffToolboxApp {
             match self.state {
                 OffToolboxState::Main => {
                     println!("in Main");
-                     
+                    components::menuitems::mainmenu::test();
                     powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Settings => {
                     println!("in Settings");
+                    egui::widgets::global_dark_light_mode_buttons(ui);
                 }
                 _ => {}
             }
