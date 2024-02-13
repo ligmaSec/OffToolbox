@@ -90,6 +90,8 @@ impl eframe::App for OffToolboxApp {
             match self.state {
                 OffToolboxState::Main => {
                     println!("in Main");
+                     
+                    powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Settings => {
                     println!("in Settings");
