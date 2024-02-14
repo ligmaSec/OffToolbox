@@ -7,7 +7,7 @@ pub struct OffToolboxApp {
     // Example stuff:
     #[serde(skip)] // opted out of serialization
     version: &'static str,
-
+    #[serde(skip)] // opted out of serialization
     state: OffToolboxState,
 }
 
@@ -27,6 +27,7 @@ pub enum OffToolboxState {
     About,
     Quit,
 }
+
 impl OffToolboxApp {
     /// Called once before the first frame.
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
@@ -84,27 +85,37 @@ impl eframe::App for OffToolboxApp {
 
             });
         });
-        
+        egui::Window::new("Quit Menu")
+            .collapsible(false)
+            .resizable(false)
+            .hscroll(false)
+            .open(&mut open)
+            .show(ctx, |ui| {
+                ui.label("Are you sure you want to quit?");
+                if ui.button("Yes").clicked() {
+                    std::process::exit(0);
+                }
+                if ui.button("No").clicked() {
+                }
+            });
+
+
         egui::CentralPanel::default().show(ctx, |ui| {
             // The central panel the region left after adding TopPanel's and SidePanel's
 
             match self.state {
                 OffToolboxState::Main => {
-                    println!("in Main");
-                    components::menuitems::mainmenu::default(ui);
+                    components::menuitems::mainmenu::default(ctx, ui);
                     powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Settings => {
-                    println!("in Settings");
-                    components::menuitems::settingsmenu::default(ui);
+                    components::menuitems::settingsmenu::default(ctx, ui);
                 }
                 OffToolboxState::About => {
-                    println!("in About");
                     components::menuitems::aboutmenu::default(ui);
                 }
                 OffToolboxState::Quit => {
-                    println!("Quitting");
-                    components::menuitems::quitmenu::default(ui);
+                    components::menuitems::quitmenu::default(ctx, ui);
                 }
                 _ => {}
             }
