@@ -1,5 +1,6 @@
 #![warn(clippy::all, rust_2018_idioms)]
 
 mod app;
-mod components;
+mod appui;
+mod core;
 pub use app::OffToolboxApp;

@@ -1,5 +1,4 @@
-use crate::components;
-
+use crate::appui;
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
@@ -7,7 +6,7 @@ pub struct OffToolboxApp {
     // Example stuff:
     #[serde(skip)] // opted out of serialization
     version: &'static str,
-    #[serde(skip)] // opted out of serialization
+    //#[serde(skip)] // opted out of serialization
     state: OffToolboxState,
 }
 
@@ -51,9 +50,6 @@ impl eframe::App for OffToolboxApp {
 
     /// Called each time the UI needs repainting, which may be many times per second.
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // Put your widgets into a `SidePanel`, `TopBottomPanel`, `CentralPanel`, `Window` or `Area`.
-        // For inspiration and more examples, go to https://emilk.github.io/egui
-        //
         let mut open = false;
         egui::Window::new("OffToolbox").open(&mut open).show(ctx, |ui| {
             ui.heading("OffToolbox test");
@@ -101,23 +97,21 @@ impl eframe::App for OffToolboxApp {
 
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            // The central panel the region left after adding TopPanel's and SidePanel's
 
             match self.state {
                 OffToolboxState::Main => {
-                    components::menuitems::mainmenu::default(ctx, ui);
+                    appui::menuitems::mainmenu::default(ctx, ui);
                     powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Settings => {
-                    components::menuitems::settingsmenu::default(ctx, ui);
+                    appui::menuitems::settingsmenu::default(ctx, ui);
                 }
                 OffToolboxState::About => {
-                    components::menuitems::aboutmenu::default(ui);
+                    appui::menuitems::aboutmenu::default(ui);
                 }
                 OffToolboxState::Quit => {
-                    components::menuitems::quitmenu::default(ctx, ui);
+                    appui::menuitems::quitmenu::default(ctx, ui);
                 }
-                _ => {}
             }
 
             ui.separator();
@@ -173,6 +167,5 @@ fn sidemenu(ui: &mut egui::Ui, state: &mut OffToolboxState) {
                     *state = OffToolboxState::Quit;
                 }
             });
-            //ui.add(crate::egui_github_link_file!());
         });
     }
