@@ -22,6 +22,7 @@ impl Default for OffToolboxApp {
 #[derive(serde::Deserialize, serde::Serialize)]
 pub enum OffToolboxState {
     Main,
+    Network(appui::menuitems::networkmenu::NetworkMenuState),
     Settings,
     About,
     Quit,
@@ -103,6 +104,9 @@ impl eframe::App for OffToolboxApp {
                     appui::menuitems::mainmenu::default(ctx, ui);
                     powered_by_egui_and_eframe(ui);
                 }
+                OffToolboxState::Network(_) => {
+                    appui::menuitems::networkmenu::default(ctx, ui);
+                }
                 OffToolboxState::Settings => {
                     appui::menuitems::settingsmenu::default(ctx, ui);
                 }
@@ -151,6 +155,11 @@ fn sidemenu(ui: &mut egui::Ui, state: &mut OffToolboxState) {
                     }).clicked() {
                         *state = OffToolboxState::Main;
                     }
+
+
+                if ui.button("Network").clicked() {
+                    *state = OffToolboxState::Network(appui::menuitems::networkmenu::NetworkMenuState::default());
+                }
 
 
                 if ui.button("Settings").clicked() {
