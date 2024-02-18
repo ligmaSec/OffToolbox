@@ -2,6 +2,7 @@ use egui::Ui;
 use egui::Context;
 use lazy_static::lazy_static;
 use std::sync::Mutex;
+use crate::core;
 
 // state 1: ARP
 // state 2: 
@@ -29,7 +30,7 @@ lazy_static! {
         current_state: NetworkMenuStates::ARP,
     });
 }
-static mut RADIO_VALUE: bool = false;
+
 pub fn default(ctx: &Context, ui: &mut Ui){
 
     ui.heading("Network");
@@ -72,11 +73,15 @@ pub fn default(ctx: &Context, ui: &mut Ui){
 
 
 fn arp(ctx: &Context, ui: &mut Ui){
+
+
     ui.horizontal( |ui| {
         ui.label("ARP Mode");
-        //ui.radio_value(&mut RADIO_VALUE, false, "Active");
-        //ui.radio_value(&mut RADIO_VALUE, true, "Passive");
+        ui.radio_value(&mut core::arp::ArpModes::default(), core::arp::ArpModes::Active, "Active");
+        ui.radio_value(&mut core::arp::ArpModes::default(), core::arp::ArpModes::Passive, "Passive");
+        //why is this not working?
     });
+    ui.end_row();
 }
 
 
