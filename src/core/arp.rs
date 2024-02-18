@@ -1,5 +1,5 @@
 
-enum ArpMode {
+pub enum ArpMode {
     Passive,
     Active,
 }

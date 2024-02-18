@@ -19,6 +19,7 @@ log = "0.4"
 # You only need serde if you want app persistence:
 serde = { version = "1.0.196", features = ["derive"] }
 chrono = "0.4.34"
+lazy_static = "1.4.0"
 
 # native:
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
