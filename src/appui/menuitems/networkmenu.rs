@@ -7,9 +7,8 @@ use egui::Context;
 // state 4: 
 //
 //
-#[derive(serde::Deserialize, serde::Serialize, Default)]
-enum NetworkMenuStates {
-    #[default]
+#[derive(serde::Deserialize, serde::Serialize)]
+pub enum NetworkMenuStates {
     ARP,
     State2,
     State3,
@@ -17,7 +16,7 @@ enum NetworkMenuStates {
 }
 
 
-#[derive(serde::Deserialize, serde::Serialize, Default)]
+#[derive(serde::Deserialize, serde::Serialize)]
 pub struct NetworkMenuState {
     current_state: NetworkMenuStates,
 }
@@ -35,9 +34,9 @@ pub fn default(ctx: &Context, ui: &mut Ui){
             NETWORK_MENU_STATE.current_state = NetworkMenuStates::ARP;
 
         }
-        
+        //TODO: add more menus
         //horizontal button
-        if ui.button("2").on_hover_text("Address Resolution Protocol").clicked() {
+        /*if ui.button("2").on_hover_text("Address Resolution Protocol").clicked() {
             NETWORK_MENU_STATE.current_state = NetworkMenuStates::State2;
         }
         if ui.button("3").on_hover_text("Address Resolution Protocol").clicked() {
@@ -45,7 +44,7 @@ pub fn default(ctx: &Context, ui: &mut Ui){
         }
         if ui.button("4").on_hover_text("Address Resolution Protocol").clicked() {
             NETWORK_MENU_STATE.current_state = NetworkMenuStates::State4;
-        }
+        }*/
 
     });
 
@@ -68,7 +67,11 @@ pub fn default(ctx: &Context, ui: &mut Ui){
 
 
 fn arp(ctx: &Context, ui: &mut Ui){
-    ui.label("this is the arp menu");
+    ui.horizontal( |ui| {
+        ui.label("ARP Mode");
+        ui.radio_value(&mut 0, 0, "Active");
+        ui.radio_value(&mut 0, 1, "Passive");
+    });
 }
 
 
