@@ -30,6 +30,7 @@ pub enum OffToolboxState {
     Network,
     Settings,
     About,
+    #[serde(skip)] // opted out of serialization
     Quit,
 }
 
