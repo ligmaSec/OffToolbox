@@ -12,7 +12,7 @@ use crate::core;
 #[derive(serde::Deserialize, serde::Serialize)]
 pub struct NetworkMenu {
     module_state: NetworkMenuStates,
-    arp: core::arp::ArpModes,
+    arp_mode: core::arp::ArpModes,
 }
 
 
@@ -28,7 +28,7 @@ impl Default for NetworkMenu {
     fn default() -> Self {
         Self {
             module_state: NetworkMenuStates::ARP,
-            arp: core::arp::ArpModes::Passive,
+            arp_mode: core::arp::ArpModes::Passive,
         }
     }
 }
@@ -42,6 +42,8 @@ impl super::View for NetworkMenu {
                 self.module_state = NetworkMenuStates::ARP;
 
             }
+            
+            
             //TODO: add more menus
             if ui.button("2").on_hover_text("Address Resolution Protocol").clicked() {
                 self.module_state = NetworkMenuStates::State2;
@@ -62,39 +64,48 @@ impl super::View for NetworkMenu {
 
 
         match self.module_state {
-            NetworkMenuStates::ARP => arp(ctx, ui),
-            NetworkMenuStates::State2 => state2(ctx, ui),
-            NetworkMenuStates::State3 => state3(ctx, ui),
-            NetworkMenuStates::State4 => state4(ctx, ui),
+            NetworkMenuStates::ARP => self.arp(ctx, ui),
+            NetworkMenuStates::State2 => self.state2(ctx, ui),
+            NetworkMenuStates::State3 => self.state3(ctx, ui),
+            NetworkMenuStates::State4 => self.state4(ctx, ui),
         }
 
         }
+
+
+
+
 }
 
+impl NetworkMenu {
 
 
-fn arp(ctx: &Context, ui: &mut Ui){
+
+    fn arp(&mut self,ctx: &Context, ui: &mut Ui){
 
 
     ui.horizontal( |ui| {
         ui.label("ARP Mode");
-        ui.radio_value(&mut core::arp::ArpModes::default(), core::arp::ArpModes::Active, "Active");
-        ui.radio_value(&mut core::arp::ArpModes::default(), core::arp::ArpModes::Passive, "Passive");
-        //why is this not working?
+        ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Passive, "Passive");
+        ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Active, "Active");
     });
     ui.end_row();
 }
 
 
-fn state2(ctx: &Context, ui: &mut Ui){
-    ui.label("this is the menu 2");
+    fn state2(&mut self, ctx: &Context, ui: &mut Ui){
+        ui.label("this is the menu 2");
+    }
+
+    fn state3(&mut self, ctx: &Context, ui: &mut Ui){
+        ui.label("this is the menu 3 ");
+    }
+
+    fn state4(&mut self, ctx: &Context, ui: &mut Ui){
+        ui.label("this is the menu 4");
+    }
+
+
 }
 
-fn state3(ctx: &Context, ui: &mut Ui){
-    ui.label("this is the menu 3 ");
-}
-
-fn state4(ctx: &Context, ui: &mut Ui){
-    ui.label("this is the menu 4");
-}
 
