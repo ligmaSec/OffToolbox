@@ -6,5 +6,5 @@ pub mod networkmenu;
 
 
 pub trait View {
-    fn letest();
+    fn ui(&mut self, ctx: &egui::Context, ui: &mut egui::Ui);
 }

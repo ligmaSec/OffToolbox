@@ -9,6 +9,7 @@ pub struct OffToolboxApp {
     version: &'static str,
     //#[serde(skip)] // opted out of serialization
     state: OffToolboxState,
+    networkmenustate: appui::menuitems::networkmenu::NetworkMenu,
 }
 
 impl Default for OffToolboxApp {
@@ -16,6 +17,7 @@ impl Default for OffToolboxApp {
         Self {
             version: "0.0.1",
             state: OffToolboxState::Main,
+            networkmenustate: appui::menuitems::networkmenu::NetworkMenu::default(),
         }
     }
 }
@@ -108,7 +110,7 @@ impl eframe::App for OffToolboxApp {
                     powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Network => {
-                    appui::menuitems::networkmenu::NetworkMenu::letest();
+                    appui::menuitems::networkmenu::NetworkMenu::ui(&mut self.networkmenustate,ctx,ui);
                 }
                 OffToolboxState::Settings => {
                     appui::menuitems::settingsmenu::default(ctx, ui);
