@@ -1,4 +1,4 @@
-#[derive(PartialEq)]
+#[derive(PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ArpModes {
     Passive,
     Active,

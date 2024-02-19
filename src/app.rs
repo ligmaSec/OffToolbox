@@ -1,4 +1,5 @@
 use crate::appui;
+use crate::appui::menuitems::View;
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
@@ -107,7 +108,7 @@ impl eframe::App for OffToolboxApp {
                     powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Network => {
-                    appui::menuitems::networkmenu::default(ctx, ui);
+                    appui::menuitems::networkmenu::NetworkMenu::letest();
                 }
                 OffToolboxState::Settings => {
                     appui::menuitems::settingsmenu::default(ctx, ui);
