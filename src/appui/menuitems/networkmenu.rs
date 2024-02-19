@@ -45,13 +45,13 @@ impl super::View for NetworkMenu {
             
             
             //TODO: add more menus
-            if ui.button("2").on_hover_text("Address Resolution Protocol").clicked() {
+            if ui.button("Menu 2").on_hover_text("Address Resolution Protocol").clicked() {
                 self.module_state = NetworkMenuStates::State2;
             }
-            if ui.button("3").on_hover_text("Address Resolution Protocol").clicked() {
+            if ui.button("Menu 3").on_hover_text("Address Resolution Protocol").clicked() {
                 self.module_state = NetworkMenuStates::State3;
             }
-            if ui.button("4").on_hover_text("Address Resolution Protocol").clicked() {
+            if ui.button("Menu 4").on_hover_text("Address Resolution Protocol").clicked() {
                 self.module_state = NetworkMenuStates::State4;
             }
 
@@ -86,8 +86,11 @@ impl NetworkMenu {
 
     ui.horizontal( |ui| {
         ui.label("ARP Mode");
-        ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Passive, "Passive");
-        ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Active, "Active");
+        ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Passive, "Passive").on_hover_text("Just listen for ARP requests");
+        ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Active, "Active").on_hover_text("Send ARP requests to all hosts on the network");
+        if ui.button("Start").clicked() {
+            println!("ARP Mode: {:?}", self.arp_mode);
+        }
     });
     ui.end_row();
 }
