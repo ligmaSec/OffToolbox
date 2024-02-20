@@ -1,7 +1,6 @@
 use egui::Ui;
 use egui::Context;
 use crate::core;
-
 // state 1: ARP
 // state 2: 
 // state 3: 
@@ -80,16 +79,22 @@ impl NetworkMenu {
 
 
     fn arp(&mut self,ctx: &Context, ui: &mut Ui){
-
-        ui.horizontal( |ui| {
-            ui.label("ARP Mode");
-            ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Passive, "Passive").on_hover_text("Just listen for ARP requests");
-            ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Active, "Active").on_hover_text("Send ARP requests to all hosts on the network");
-            if ui.button("Start").clicked() {
-                println!("ARP Mode: {:?}", self.arp_mode);
-            }
-        });
-        ui.end_row();
+        //TODO: use linux capabilities to add raw socket ability https://squidarth.com/networking/systems/rc/2018/05/28/using-raw-sockets.html
+        if nix::unistd::Uid::current().is_root() {
+            ui.horizontal( |ui| {
+                ui.label("ARP Mode");
+                ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Passive, "Passive").on_hover_text("Just listen for ARP requests");
+                ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Active, "Active").on_hover_text("Send ARP requests to all hosts on the network");
+                if ui.button("Start").clicked() {
+                    println!("ARP Mode: {:?}", self.arp_mode);
+                }
+            });
+            ui.end_row();
+        }
+        else {
+            ui.label("This feature requires root privileges because it uses raw sockets.");
+            ui.hyperlink_to("More info.", "https://squidarth.com/networking/systems/rc/2018/05/28/using-raw-sockets.html");
+        }
 }
 
 
