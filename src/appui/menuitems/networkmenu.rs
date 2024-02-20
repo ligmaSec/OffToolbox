@@ -2,7 +2,6 @@ use egui::Ui;
 use egui::Context;
 use crate::core;
 
-
 // state 1: ARP
 // state 2: 
 // state 3: 
@@ -80,19 +79,17 @@ impl super::View for NetworkMenu {
 impl NetworkMenu {
 
 
-
     fn arp(&mut self,ctx: &Context, ui: &mut Ui){
 
-
-    ui.horizontal( |ui| {
-        ui.label("ARP Mode");
-        ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Passive, "Passive").on_hover_text("Just listen for ARP requests");
-        ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Active, "Active").on_hover_text("Send ARP requests to all hosts on the network");
-        if ui.button("Start").clicked() {
-            println!("ARP Mode: {:?}", self.arp_mode);
-        }
-    });
-    ui.end_row();
+        ui.horizontal( |ui| {
+            ui.label("ARP Mode");
+            ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Passive, "Passive").on_hover_text("Just listen for ARP requests");
+            ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Active, "Active").on_hover_text("Send ARP requests to all hosts on the network");
+            if ui.button("Start").clicked() {
+                println!("ARP Mode: {:?}", self.arp_mode);
+            }
+        });
+        ui.end_row();
 }
 
 
@@ -107,7 +104,6 @@ impl NetworkMenu {
     fn state4(&mut self, ctx: &Context, ui: &mut Ui){
         ui.label("this is the menu 4");
     }
-
 
 }
 
