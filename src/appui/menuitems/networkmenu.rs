@@ -10,7 +10,7 @@ use crate::core;
 #[derive(serde::Deserialize, serde::Serialize)]
 pub struct NetworkMenu {
     module_state: NetworkMenuStates,
-    arp_mode: core::arp::ArpModes,
+    arp_mode: core::network::arp::ArpModes,
 }
 
 
@@ -26,7 +26,7 @@ impl Default for NetworkMenu {
     fn default() -> Self {
         Self {
             module_state: NetworkMenuStates::ARP,
-            arp_mode: core::arp::ArpModes::Passive,
+            arp_mode: core::network::arp::ArpModes::Passive,
         }
     }
 }
@@ -83,8 +83,8 @@ impl NetworkMenu {
         if nix::unistd::Uid::current().is_root() {
             ui.horizontal( |ui| {
                 ui.label("ARP Mode");
-                ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Passive, "Passive").on_hover_text("Just listen for ARP requests");
-                ui.radio_value(&mut self.arp_mode, core::arp::ArpModes::Active, "Active").on_hover_text("Send ARP requests to all hosts on the network");
+                ui.radio_value(&mut self.arp_mode, core::network::arp::ArpModes::Passive, "Passive").on_hover_text("Just listen for ARP requests");
+                ui.radio_value(&mut self.arp_mode, core::network::arp::ArpModes::Active, "Active").on_hover_text("Send ARP requests to all hosts on the network");
                 if ui.button("Start").clicked() {
                     println!("ARP Mode: {:?}", self.arp_mode);
                 }
