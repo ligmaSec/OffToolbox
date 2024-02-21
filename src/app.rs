@@ -28,6 +28,7 @@ impl Default for OffToolboxApp {
 pub enum OffToolboxState {
     Main,
     Network,
+    Cryptography,
     Settings,
     About,
     #[serde(skip)] // opted out of serialization
@@ -113,6 +114,9 @@ impl eframe::App for OffToolboxApp {
                 OffToolboxState::Network => {
                     appui::menuitems::networkmenu::NetworkMenu::ui(&mut self.networkmenustate,ctx,ui);
                 }
+                OffToolboxState::Cryptography => {
+                    todo!();
+                }
                 OffToolboxState::Settings => {
                     appui::menuitems::settingsmenu::default(ctx, ui);
                 }
@@ -167,6 +171,9 @@ fn sidemenu(ui: &mut egui::Ui, state: &mut OffToolboxState) {
                     *state = OffToolboxState::Network;
                 }
 
+                if ui.button("Cryptography").clicked() {
+                    *state = OffToolboxState::Cryptography;
+                }
 
                 if ui.button("Settings").clicked() {
                     *state = OffToolboxState::Settings;

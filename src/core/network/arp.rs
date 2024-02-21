@@ -4,8 +4,8 @@ pub enum ArpModes {
     Active,
 }
 
-impl ArpModes {
-    pub fn default() -> ArpModes {
+impl Default for ArpModes {
+    fn default() -> ArpModes {
         ArpModes::Active
     }
 }
