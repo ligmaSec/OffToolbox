@@ -87,6 +87,7 @@ impl NetworkMenu {
                 ui.radio_value(&mut self.arp_mode, core::network::arp::ArpModes::Active, "Active").on_hover_text("Send ARP requests to all hosts on the network");
                 if ui.button("Start").clicked() {
                     println!("ARP Mode: {:?}", self.arp_mode);
+                    ctx.set_pixels_per_point(2.0); 
                 }
             });
             ui.end_row();
