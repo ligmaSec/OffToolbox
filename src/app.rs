@@ -1,6 +1,13 @@
 use crate::appui;
 use crate::appui::menuitems::View;
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
+
+// modules state
+#[derive(serde::Deserialize, serde::Serialize)]
+struct ModulesState {
+    network: appui::menuitems::networkmenu::NetworkMenu,
+    cryptography: appui::menuitems::cryptographymenu::CryptoMenu,
+}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct OffToolboxApp {
@@ -9,7 +16,7 @@ pub struct OffToolboxApp {
     version: &'static str,
     //#[serde(skip)] // opted out of serialization
     state: OffToolboxState,
-    networkmenustate: appui::menuitems::networkmenu::NetworkMenu,
+    modules_state: ModulesState,
 }
 
 impl Default for OffToolboxApp {
@@ -17,7 +24,10 @@ impl Default for OffToolboxApp {
         Self {
             version: "0.0.1",
             state: OffToolboxState::Main,
-            networkmenustate: appui::menuitems::networkmenu::NetworkMenu::default(),
+            modules_state: ModulesState {
+                network: appui::menuitems::networkmenu::NetworkMenu::default(),
+                cryptography: appui::menuitems::cryptographymenu::CryptoMenu::default(),
+            },
         }
     }
 }
@@ -112,10 +122,10 @@ impl eframe::App for OffToolboxApp {
                     powered_by_egui_and_eframe(ui);
                 }
                 OffToolboxState::Network => {
-                    appui::menuitems::networkmenu::NetworkMenu::ui(&mut self.networkmenustate,ctx,ui);
+                    appui::menuitems::networkmenu::NetworkMenu::ui(&mut self.modules_state.network,ctx,ui);
                 }
                 OffToolboxState::Cryptography => {
-                    todo!();
+                    appui::menuitems::cryptographymenu::CryptoMenu::ui(&mut self.modules_state.cryptography,ctx,ui);
                 }
                 OffToolboxState::Settings => {
                     appui::menuitems::settingsmenu::default(ctx, ui);
